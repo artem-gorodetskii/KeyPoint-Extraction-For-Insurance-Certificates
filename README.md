@@ -1,9 +1,8 @@
 # KeyPoint Extraction Server For Insurance Certificates
 
-Processing Server based on modified version of PICK model ["PICK: Processing Key Information Extraction from Documents using Improved Graph 
+Processing Server based on the modified version of PICK model ["PICK: Processing Key Information Extraction from Documents using Improved Graph 
 Learning-Convolutional Networks"](https://arxiv.org/abs/2004.07464) (ICPR 2020). 
 
-The server requires the pre trained PyTorch model.
 
 ## Key modifications
 
