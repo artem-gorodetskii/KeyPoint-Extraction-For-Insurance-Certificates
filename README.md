@@ -1,8 +1,30 @@
-# Processing Server for PICK-PyTorch
-Processing Server based on Updated version of PyTorch PICK model ["PICK: Processing Key Information Extraction from Documents using Improved Graph 
+# KeyPoint Extraction Server For Insurance Certificates
+
+Processing Server based on modified version of PICK model ["PICK: Processing Key Information Extraction from Documents using Improved Graph 
 Learning-Convolutional Networks"](https://arxiv.org/abs/2004.07464) (ICPR 2020). 
 
-The server utilizes the pretrained model from [pick_update_03](https://git.azcltd.com/review_group/rnd-ec-insurance-recognition/-/tree/gorodetsky_dev/experiments/pick_update_03).
+The server requires the pre trained PyTorch model.
+
+## Key modifications
+
+- The Batch Normalization layers in the ResNet model was changed on [Group Normalization layers](https://arxiv.org/pdf/1803.08494.pdf).
+- The final convolution block in the ResNet with block expansion and number of features = output_channels was removed.
+- The prosses of encoding image segments to vector representation was changed: the output of RoIAlign algorithm is prosessed by stack of linear layers.
+- Instead of summation the text and image segments embeddings were concatenated and projected to dimension = out_dim.
+- Normalization of input images was performed using precalculated statistics for train dataset.
+- Changes in the model configuration: embedding_dim = 512; out_dim = 512; feedforward_dim = 1024; image_encoder = "resnet34", nheaders = 8.
+- The training was performed on single GPU using batch size 2 and stepwise learning scheduler with gamma 0.5.
+- The number of fully correctly recognized documents was used as a main monitoring metric during training.
+- Now train dataloader supports batch bucketing technique (see data_utils/batch_sampler.py and config.json).
+- Now encoder block supports SE ResNet architectures (see model/resnet.py and model/encoder.py)
+- The gradient clipping was added to training loop.
+
+## Model performance
+
+- The model achieves the value of mean F1 score 95.7 % on validation data.
+- 50.3 % of the validation documents were recognized fully correct.
+- 88.6 % of the validation documents were recognized with F1 score > 90 %.
+- 95.2 % of the validation documents were recognized with F1 score > 80 %.
 
 ## Requirements
 * python = 3.6 
